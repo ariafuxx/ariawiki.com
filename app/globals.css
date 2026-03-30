@@ -2,26 +2,139 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Custom cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #E8A820;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: width 0.2s, height 0.2s;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.custom-cursor.hover {
+  width: 44px;
+  height: 44px;
+}
+
+/* Hide custom cursor on touch devices */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+  * {
+    cursor: auto !important;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Card hover animation */
+.card-interactive {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.card-interactive:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+}
+
+/* Nav link underline animation */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #E8A820;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Filter pill hover */
+.filter-pill {
+  transition: all 0.2s;
+}
+
+.filter-pill:hover {
+  background: #ece8df !important;
+}
+
+/* View button hover */
+.view-button {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.view-button:hover {
+  transform: scale(1.06);
+}
+
+/* Article content styles */
+.article-content .core-insight {
+  border-left: 4px solid #E8A820;
+  padding-left: 1.5rem;
+  background: #FFFDF5;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 0;
+}
+
+/* Prose overrides for article content */
+.prose-ariawiki {
+  --tw-prose-body: #1A1A1A;
+  --tw-prose-headings: #1A1A1A;
+  --tw-prose-links: #E8A820;
+  --tw-prose-bold: #1A1A1A;
+  --tw-prose-code: #1A1A1A;
+}
+
+.prose-ariawiki h2 {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+}
+
+.prose-ariawiki code {
+  font-family: var(--font-dm-mono), monospace;
+}
+
+.prose-ariawiki a {
+  text-decoration-color: #E8A820;
+  text-underline-offset: 3px;
+}
+
+.prose-ariawiki a:hover {
+  color: #E8A820;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4D0C8;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B0AA9E;
 }
