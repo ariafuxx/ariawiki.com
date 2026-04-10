@@ -7,12 +7,12 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "ariawiki-pipeline"
-database_id = "placeholder-create-with-wrangler-d1-create"
+database_id = "bdde0102-ca3a-4f05-8edb-f5b3ca6978cd"
 
 # KV Namespace (for prompt templates and config cache)
 [[kv_namespaces]]
 binding = "KV"
-id = "placeholder-create-with-wrangler-kv-namespace-create"
+id = "3c1bf493570b4624a46f9e709a656692"
 
 # Cron Triggers
 [triggers]
