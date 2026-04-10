@@ -170,6 +170,12 @@ export default function PipelineClient() {
     }
   };
 
+  // Override body cursor:none for this page (no custom cursor component here)
+  useEffect(() => {
+    document.body.style.cursor = "auto";
+    return () => { document.body.style.cursor = "none"; };
+  }, []);
+
   return (
     <div style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 24px", fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
       <h1 style={{ fontFamily: "var(--font-serif), Georgia, serif", fontSize: "32px", fontWeight: 400, marginBottom: "8px" }}>

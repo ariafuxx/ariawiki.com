@@ -76,21 +76,33 @@ function isIrrelevantContent(title: string | null, content: string | null): bool
   const text = `${title || ""} ${content || ""}`.toLowerCase();
 
   const skipPatterns = [
+    // Legal/policy
     "terms and conditions",
     "terms of service",
     "privacy policy",
     "cookie policy",
-    "contest rules",
-    "sweepstakes",
-    "child safety",
-    "content policy update",
-    "community guidelines",
     "acceptable use",
     "legal notice",
     "compliance update",
+    "community guidelines",
+    "content policy",
+    // Safety/trust (not Sylvia's focus area)
+    "child safety",
+    "trust and safety",
+    "safety blueprint",
+    "online safety",
+    "content moderation",
+    "abuse prevention",
+    // HR/marketing
+    "contest rules",
+    "sweepstakes",
     "job posting",
     "careers at",
     "we're hiring",
+    "join our team",
+    // Generic announcements
+    "press release",
+    "media advisory",
   ];
 
   return skipPatterns.some((pattern) => text.includes(pattern));
