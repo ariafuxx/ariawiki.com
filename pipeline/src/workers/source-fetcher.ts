@@ -28,10 +28,21 @@ export async function handleSourceFetch(env: Env): Promise<{ fetched: number; ne
           continue;
       }
 
+      // Filter items
+      const filtered = items.filter((item) => {
+        // Skip items before 2026
+        if (item.published) {
+          const pubDate = new Date(item.published);
+          if (pubDate.getFullYear() < 2026) return false;
+        }
+        // Skip irrelevant topics
+        if (isIrrelevantContent(item.title, item.content)) return false;
+        return true;
+      });
+
       totalFetched += items.length;
 
-      for (const item of items) {
-        // Generate deterministic ID for dedup
+      for (const item of filtered) {
         const itemId = hashId(`${source.id}:${item.id}`);
 
         const inserted = await db.insertRawItem({
@@ -55,6 +66,34 @@ export async function handleSourceFetch(env: Env): Promise<{ fetched: number; ne
 
   console.log(`Source fetch complete: ${totalFetched} items checked, ${totalNew} new`);
   return { fetched: totalFetched, new: totalNew };
+}
+
+/**
+ * Filter out content that isn't relevant to AI learning.
+ * Skip legal docs, contests, child safety, terms of service, etc.
+ */
+function isIrrelevantContent(title: string | null, content: string | null): boolean {
+  const text = `${title || ""} ${content || ""}`.toLowerCase();
+
+  const skipPatterns = [
+    "terms and conditions",
+    "terms of service",
+    "privacy policy",
+    "cookie policy",
+    "contest rules",
+    "sweepstakes",
+    "child safety",
+    "content policy update",
+    "community guidelines",
+    "acceptable use",
+    "legal notice",
+    "compliance update",
+    "job posting",
+    "careers at",
+    "we're hiring",
+  ];
+
+  return skipPatterns.some((pattern) => text.includes(pattern));
 }
 
 /**
