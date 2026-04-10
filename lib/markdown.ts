@@ -12,7 +12,7 @@ export async function renderMarkdown(content: string): Promise<string> {
 
   // Wrap "Core Insight" section in a styled div
   html = html.replace(
-    /(<h2[^>]*>(?:Core Insight|核心洞察)<\/h2>)([\s\S]*?)(?=<h2|$)/,
+    /(<h2[^>]*>(?:Core Insight|核心洞察|核心发现)<\/h2>)([\s\S]*?)(?=<h2|<hr|$)/,
     '<div class="core-insight">$1$2</div>'
   );
 

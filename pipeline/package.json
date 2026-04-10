@@ -1,0 +1,20 @@
+{
+  "name": "ariawiki-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 execute ariawiki-pipeline --local --file=migrations/0001_initial.sql",
+    "db:migrate:remote": "wrangler d1 execute ariawiki-pipeline --remote --file=migrations/0001_initial.sql"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "fast-xml-parser": "^4.5.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241230.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^3.99.0"
+  }
+}

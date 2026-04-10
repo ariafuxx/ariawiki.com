@@ -28,4 +28,5 @@ export interface Article extends ArticleFrontmatter {
 
 export interface ArticleWithHtml extends Article {
   html: string; // rendered HTML
+  mdx?: string; // raw MDX content (when source is .mdx)
 }

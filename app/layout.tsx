@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Mono, Instrument_Serif, Noto_Sans_SC } from "next/font/google";
+import { DM_Sans, DM_Mono, Instrument_Serif, Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -28,6 +28,13 @@ const notoSansSC = Noto_Sans_SC({
   preload: false,
 });
 
+const notoSerifSC = Noto_Serif_SC({
+  subsets: ["latin"],
+  variable: "--font-noto-serif-sc",
+  weight: ["400", "500", "700"],
+  preload: false,
+});
+
 export const metadata: Metadata = {
   title: "ariawiki.com — Personal AI Learning Library",
   description: "A personal AI learning library tracking papers, tech blogs, products, and quick insights about artificial intelligence.",
@@ -46,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${dmSans.variable} ${dmMono.variable} ${instrumentSerif.variable} ${notoSansSC.variable} font-sans bg-offwhite min-h-screen`}
+        className={`${dmSans.variable} ${dmMono.variable} ${instrumentSerif.variable} ${notoSansSC.variable} ${notoSerifSC.variable} font-sans bg-offwhite min-h-screen`}
         style={{ cursor: "none" }}
       >
         {children}

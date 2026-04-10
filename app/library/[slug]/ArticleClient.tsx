@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/ui/CustomCursor";
@@ -14,6 +16,12 @@ import {
   COVER_GRADIENTS,
 } from "@/lib/constants";
 import { Collection, Difficulty, Status, Article } from "@/lib/types";
+import { mdxComponents } from "@/components/article";
+
+const MDXContent = dynamic(
+  () => import("@/components/article/MDXContent"),
+  { ssr: false }
+);
 
 type ArticleWithoutContent = Omit<Article, "content">;
 
@@ -40,10 +48,11 @@ interface ArticleData {
 
 interface ArticleClientProps {
   article: ArticleData;
+  mdxSource?: MDXRemoteSerializeResult | null;
   relatedArticles: ArticleWithoutContent[];
 }
 
-export default function ArticleClient({ article, relatedArticles }: ArticleClientProps) {
+export default function ArticleClient({ article, mdxSource, relatedArticles }: ArticleClientProps) {
   const [lang, setLang] = useState<Lang>("en");
 
   useEffect(() => {
@@ -78,21 +87,31 @@ export default function ArticleClient({ article, relatedArticles }: ArticleClien
           </Link>
 
           {/* Cover */}
-          <div
-            className="w-full rounded-xl overflow-hidden mb-8 flex items-center justify-center relative"
-            style={{ background: coverBg, aspectRatio: "4/1" }}
-          >
+          {article.cover && article.cover.startsWith("/images/") ? (
+            <div className="w-full rounded-xl overflow-hidden mb-8" style={{ aspectRatio: "2/1" }}>
+              <img
+                src={article.cover}
+                alt={article.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
             <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px)",
-                backgroundSize: "5px 5px",
-              }}
-            />
-            <span className="font-mono text-lg font-medium text-white/50 tracking-widest relative">
-              {article.title.split(" ").slice(0, 3).join(" ").toUpperCase()}
-            </span>
-          </div>
+              className="w-full rounded-xl overflow-hidden mb-8 flex items-center justify-center relative"
+              style={{ background: coverBg, aspectRatio: "4/1" }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px)",
+                  backgroundSize: "5px 5px",
+                }}
+              />
+              <span className="font-mono text-lg font-medium text-white/50 tracking-widest relative">
+                {article.title.split(" ").slice(0, 3).join(" ").toUpperCase()}
+              </span>
+            </div>
+          )}
 
           {/* Metadata row */}
           <div className="flex items-center gap-3 flex-wrap mb-4">
@@ -144,10 +163,13 @@ export default function ArticleClient({ article, relatedArticles }: ArticleClien
           </a>
 
           {/* Article content */}
-          <div
-            className="article-content prose prose-lg prose-ariawiki max-w-[720px] font-sans"
-            dangerouslySetInnerHTML={{ __html: article.html }}
-          />
+          <div className="article-content prose prose-lg prose-ariawiki max-w-[720px] font-sans">
+            {mdxSource ? (
+              <MDXContent source={mdxSource} components={mdxComponents} />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: article.html }} />
+            )}
+          </div>
 
           {/* Related articles */}
           {relatedArticles.length > 0 && (

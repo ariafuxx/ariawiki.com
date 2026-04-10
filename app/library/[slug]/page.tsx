@@ -1,4 +1,6 @@
 import { getArticleBySlug, getArticleSlugs, getArticlesBySlugSync } from "@/lib/content";
+import { serialize } from "next-mdx-remote/serialize";
+import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 import ArticleClient from "./ArticleClient";
 
@@ -31,6 +33,16 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     ? getArticlesBySlugSync(article.related).map(({ content: _content, ...rest }) => rest)
     : [];
 
+  // If MDX, serialize at build time with optional scope data
+  let mdxSerialized = null;
+  if (article.mdx) {
+    mdxSerialized = await serialize(article.mdx, {
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+      },
+    });
+  }
+
   return (
     <ArticleClient
       article={{
@@ -53,6 +65,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
         related: article.related,
         html: article.html,
       }}
+      mdxSource={mdxSerialized}
       relatedArticles={relatedArticles}
     />
   );
